@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name = "Silver1")
-public class SilverCode2019Charles extends LinearOpMode {
+public class Tele1_CK extends LinearOpMode {
     //Declarations
     private DcMotor leftFront, rightFront, leftBack, rightBack;
     private DcMotor intakeLeft, intakeRight;
@@ -50,7 +50,7 @@ public class SilverCode2019Charles extends LinearOpMode {
         pusher = hardwareMap.get(CRServo.class, "pusher");
 
         //This for grabbing the block servo
-        nubGrabber = hardwareMap.get(Servo.class, "nubG");
+        nubGrabber = hardwareMap.get(Servo.class, "hold");
 
         //This is for the outtake servo
         rackPinionR = hardwareMap.get(Servo.class, "outR");
@@ -88,25 +88,25 @@ public class SilverCode2019Charles extends LinearOpMode {
         while(!isStopRequested()){
             //MotorPow dpad
             {
-            if (gamepad1.dpad_up && motorPow < 1){
-                motorPow += 0.1;
-                telemetry.addData("motorPow var: ", motorPow);
-                telemetry.update();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (gamepad1.dpad_up && motorPow < 1){
+                    motorPow += 0.1;
+                    telemetry.addData("motorPow var: ", motorPow);
+                    telemetry.update();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else if (gamepad1.dpad_down && motorPow > 0.1){
+                    motorPow -= 0.1;
+                    telemetry.addData("motorPow var: ", motorPow);
+                    telemetry.update();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } else if (gamepad1.dpad_down && motorPow > 0.1){
-                motorPow -= 0.1;
-                telemetry.addData("motorPow var: ", motorPow);
-                telemetry.update();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
 
             }
 
@@ -163,27 +163,27 @@ public class SilverCode2019Charles extends LinearOpMode {
                 nubGrabber.setPosition(0.55);
 
 
-            //TeleOp Foundation ServorackPinionL
-            if (gamepad1.left_trigger > 0.15){
-                foundationL.setPosition(1);
-                foundationR.setPosition(1);
-            }
-            if (gamepad1.right_trigger > 0.15){
-                foundationL.setPosition(0);
-                foundationR.setPosition(0);
-            }
+                //TeleOp Foundation ServorackPinionL
+                if (gamepad1.left_trigger > 0.15){
+                    foundationL.setPosition(1);
+                    foundationR.setPosition(1);
+                }
+                if (gamepad1.right_trigger > 0.15){
+                    foundationL.setPosition(0);
+                    foundationR.setPosition(0);
+                }
 
 
-            if (gamepad2.x){
+                if (gamepad2.x){
 
-                pusher.setPower(1);
-            } else if (gamepad2.y){
-                pusher.setPower(-1);
-            } else {
-                pusher.setPower(0);
-            }
+                    pusher.setPower(1);
+                } else if (gamepad2.y){
+                    pusher.setPower(-1);
+                } else {
+                    pusher.setPower(0);
+                }
 
-            //Auto Code
+                //Auto Code
 
             /*
 
@@ -296,11 +296,8 @@ public class SilverCode2019Charles extends LinearOpMode {
 
 
 
+            }
         }
+
     }
-
-   }
-   }
-
-
-
+}
