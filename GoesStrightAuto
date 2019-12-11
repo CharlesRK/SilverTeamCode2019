@@ -1,0 +1,125 @@
+//----COPY(Start)---------------------
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+
+@Autonomous(name = "goesStrightTesting", group = "Concept")
+public class goesStrightAuto extends LinearOpMode {
+
+    private DcMotor leftFront, rightFront, leftBack, rightBack;
+    private DcMotor intakeLeft, intakeRight;
+    private DcMotor lift;
+
+    //DECLARE CRSERVOS APART FROM 180 SERVOS
+    private Servo foundationL, foundationR, nubGrabber,rackPinionR;
+    private CRServo pusher;
+
+
+    public void runOpMode() throws InterruptedException {
+        //motorPow var
+        double motorPow = 0.5;
+
+
+        //Setting configuration
+        //  7 motors
+
+        //These are the drive motors
+        leftFront = hardwareMap.dcMotor.get("fL");
+        rightFront = hardwareMap.dcMotor.get("fR");
+        leftBack = hardwareMap.dcMotor.get("bL");
+        rightBack = hardwareMap.dcMotor.get("bR");
+
+        //These are the intake motors
+        intakeRight = hardwareMap.dcMotor.get("inL");
+        intakeLeft = hardwareMap.dcMotor.get("inR");
+
+        //This is the lift motor
+        lift = hardwareMap.dcMotor.get("lift");
+
+        // 5 Servos
+        //These are foundations servos
+        foundationL = hardwareMap.get(Servo.class, "foundL");
+        foundationR = hardwareMap.get(Servo.class, "foundR");
+
+        //This is for the servo that will push the block forward
+        pusher = hardwareMap.get(CRServo.class, "pusher");
+
+        //This for grabbing the block servo
+        nubGrabber = hardwareMap.get(Servo.class, "nubG");
+
+        //This is for the outtake servo
+        rackPinionR = hardwareMap.get(Servo.class, "outR");
+
+
+        //Setting direction
+        intakeRight.setDirection(DcMotor.Direction.REVERSE);
+        intakeLeft.setDirection(DcMotor.Direction.FORWARD);
+        lift.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
+        foundationL.setDirection(Servo.Direction.FORWARD);
+        foundationR.setDirection(Servo.Direction.REVERSE);
+
+        //Setting power to 0
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+
+        lift.setPower(0);
+
+        pusher.setPower(0);
+
+
+        waitForStart();
+
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Hello Driver", "Press Play Button");
+        telemetry.update();
+        //reset servos
+
+        //- COPY (END)----------------------------------
+        waitForStart();
+
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(0.5);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        leftFront.setPower(-0.1);
+        rightFront.setPower(-0.1);
+        leftBack.setPower(-0.1);
+        rightBack.setPower(-0.1);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+
+
+    }
+
+}
