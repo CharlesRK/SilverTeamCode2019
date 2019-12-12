@@ -1,4 +1,4 @@
-  //----COPY(Start)---------------------
+//----COPY(Start)---------------------
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,51 +12,27 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "goesStright", group = "Concept")
 public class fullAuto extends LinearOpMode {
+    //Declarations
+    private DcMotor leftFront, rightFront, leftBack, rightBack, intakeLeft, intakeRight, lift;
+    private Servo foundationL, foundationR, blockHolder, rackPinion;
+    private CRServo wheel;
 
-    private DcMotor leftFront, rightFront, leftBack, rightBack;
-    private DcMotor intakeLeft, intakeRight;
-    private DcMotor lift;
-
-    //DECLARE CRSERVOS APART FROM 180 SERVOS
-    private Servo foundationL, foundationR, nubGrabber, rackPinionR;
-    private CRServo pusher;
-
-
-    public void runOpMode() throws InterruptedException {
-        //motorPow var
+    public void runOpMode() {
         double motorPow = 0.5;
 
-
         //Setting configuration
-        //  7 motors
-
-        //These are the drive motors
         leftFront = hardwareMap.dcMotor.get("fL");
         rightFront = hardwareMap.dcMotor.get("fR");
         leftBack = hardwareMap.dcMotor.get("bL");
         rightBack = hardwareMap.dcMotor.get("bR");
-
-        //These are the intake motors
         intakeRight = hardwareMap.dcMotor.get("inL");
         intakeLeft = hardwareMap.dcMotor.get("inR");
-
-        //This is the lift motor
         lift = hardwareMap.dcMotor.get("lift");
-
-        // 5 Servos
-        //These are foundations servos
         foundationL = hardwareMap.get(Servo.class, "foundL");
         foundationR = hardwareMap.get(Servo.class, "foundR");
-
-        //This is for the servo that will push the block forward
-        pusher = hardwareMap.get(CRServo.class, "pusher");
-
-        //This for grabbing the block servo
-        nubGrabber = hardwareMap.get(Servo.class, "nubG");
-
-        //This is for the outtake servo
-        rackPinionR = hardwareMap.get(Servo.class, "outR");
-
+        rackPinion = hardwareMap.get(Servo.class, "out");
+        blockHolder = hardwareMap.get(Servo.class, "hold");
+        wheel = hardwareMap.get(CRServo.class, "pusher");
 
         //Setting direction
         intakeRight.setDirection(DcMotor.Direction.REVERSE);
@@ -64,23 +40,81 @@ public class fullAuto extends LinearOpMode {
         lift.setDirection(DcMotor.Direction.FORWARD);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection(DcMotor.Direction.REVERSE);
-        foundationL.setDirection(Servo.Direction.FORWARD);
-        foundationR.setDirection(Servo.Direction.REVERSE);
+        wheel.setDirection(CRServo.Direction.FORWARD);
+
+        //Setting zero power behavior for dc motors
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intakeLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Setting power to 0
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
-
+        lift.setPower(0);
         intakeLeft.setPower(0);
         intakeRight.setPower(0);
+        wheel.setPower(0);
+        rackPinion.setPosition(0);
 
-        lift.setPower(0);
 
-        pusher.setPower(0);
+
+        waitForStart();
+
+
+
+    /*
+
+               Motor Layout
+         ____     (Front)    ____
+        |    |==============|    |
+        | fL |              | fR |
+        |    |              |    |
+        |____|              |____|
+             |              |
+             |              |
+             |   (lift)     |
+             |              |
+             |              |
+             | (inL)   (inR)|
+         ____|==============|____
+        |    |              |    |
+        | bL |(Intake Ramp) | bR |
+        |    |              |    |
+        |____|              |____|
+                  (Back)
+
+
+
+
+
+                Servo Layout
+
+         ____    (Front)     ____
+        |FnL |==============|FnR |
+        |    |              |    |
+        |    | (out)        |    |
+        |____|              |____|
+             |              |
+             |    (hold)    |
+             |              |
+             |       (Push) |
+             |              |
+             |              |
+         ____|==============|____
+        |    |              |    |
+        |    |              |    |
+        |    |              |    |
+        |____|              |____|
+                 (Back)
+     */
+
+
 
 
         waitForStart();
@@ -93,6 +127,190 @@ public class fullAuto extends LinearOpMode {
 
         //- COPY (END)----------------------------------
         waitForStart();
+
+
+        // 0) lift up
+
+        lift.setPower(.5);
+
+        sleep(300);
+
+
+        // 1/2) open holder
+
+        blockHolder.setPosition(.7);
+
+
+
+        // 1) straf to the left
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(-0.5);
+        leftBack.setPower(-0.5);
+        rightBack.setPower(0.5);
+
+
+        sleep(1000);
+
+
+
+        // 2) Go stright
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(0.5);
+
+        sleep(500);
+
+        // 3)  straf to the left
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(-0.5);
+        leftBack.setPower(-0.5);
+        rightBack.setPower(0.5);
+
+        sleep(800);
+
+        // 4) Go back
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(-0.5);
+        leftBack.setPower(-0.5);
+        rightBack.setPower(-0.5);
+
+        sleep(500);
+
+        // 5) intake block
+
+        intakeLeft.setPower(-0.9);
+        intakeRight.setPower(0.9);
+        wheel.setPower(0.4);
+
+        sleep(1000);
+
+
+        // 6) intake block 1
+        wheel.setPower(0.4);
+
+        sleep(3000);
+
+
+        // 7) lift down
+
+        lift.setPower(-.5);
+
+        sleep(270);
+
+
+        //  8) close holder
+
+        blockHolder.setPosition(.4);
+
+        // 9) strft right
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(-0.5);
+
+        sleep (800)
+
+        // 10) go back
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(0.5);
+
+
+
+        // 11)  turn (90 deg to the right)
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(-0.5);
+        rightBack.setPower(0.5);
+
+        sleep(1000);
+
+
+        // 12) go forward
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(0.5);
+
+
+
+        // 13) get the foundation
+
+        foundationL.setPosition(1);
+        foundationR.setPosition(1);
+
+
+        // 14) Upper the lift
+
+        lift.setPower(-0.5);
+
+        sleep(270);
+
+
+        // 15) out take the block
+
+        rackPinion.setPosition(1.3);
+
+
+
+        // 16) lower the lift
+
+        lift.setPower(-0.5);
+
+        sleep(270);
+
+
+
+        // 17)  open holder
+
+        blockHolder.setPosition(.7);
+
+
+        // 18 move the out take in
+
+        rackPinion.setPosition(0);
+
+
+
+        // 19) go backward
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(-0.5);
+        leftBack.setPower(-0.5);
+        rightBack.setPower(-0.5);
+
+        sleep(1000);
+
+
+        // 20) straft to the right
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(-0.5);
+
+        sleep(1000);
+
+
+       // (under the bridge)
+        // END
+
+
+
+
+
+
+
 
 
 
